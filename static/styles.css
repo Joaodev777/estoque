@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Shadow&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+body {
+    font-family: 'Afacad', sans-serif;
+}
+
+.font {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+}
+
+.titli{
+    font-family: 'Black Ops One', cursive;
+    text-shadow: 1px 1px 2px #00FF87;
+    font-size: 30px;
+
+}
+.modal-title{
+    text-align: center;
+    margin-left: auto;
+}
+.modal{
+    color: white;
+}
+.title {
+    font-family: 'Black Ops One', cursive;
+    color: #000000;
+    /* Tomato red title color */
+    font-size: 50px;
+    text-shadow: 2px 2px 4px #00FF87;
+
+}
+
+nav{
+    height: 100px;
+    z-index: 9999;
+    justify-content: center;
+    display: flex;
+    margin-left: auto;
+}
+/* 
+.sombra{
+    text-shadow: 2px 2px 3px #00FF87;
+} */
+.btn-normal:hover{
+    background-color: #00FF87;
+}
+.btn-normal{
+    background-color: #ff9006;   
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-top:15px ;
+    width: 100%;
+    padding: 5px;
+
+}
+
+.font-bold {
+    font-size: 25px;
+    font-family: 'Exo 2', cursive;
+
+
+}

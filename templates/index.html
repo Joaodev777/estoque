@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #F0F0F0; /* Light goldenrod yellow background */
+            font-family: 'Gilroy-Bold', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container.bg-estoque {
+            background-color: #FFF; /* White background for the main container */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+        }
+
+
+
+        .table {
+            background-color: #FFF; /* White background for the table */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight box shadow */
+            border-radius: 10px;
+        }
+
+        .btn-model-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: fixed;
+            z-index: 99;
+            bottom: 10px;
+            width: 50px;
+            right: 10px;
+        }
+
+        .btn-model {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            height: 50px;
+            width: 50px;
+            margin-top: 5px;
+            border-radius: 50%;
+        }
+
+        .btn-model i {
+            font-size: 25px;
+        }
+
+
+
+    
+
+        .bx-chevron-left {
+            font-size: 40px;
+            position: fixed;
+            padding: 15px;
+            animation: moveIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes moveIcon {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(20px);
+            }
+        }
+
+        /* Add your existing styles here */
+
+    </style>
+</head>
+
+<body class="text-dark">
+
+<nav>
+    <img class="img" src="{{ url_for('static', filename='logo-black.png') }}">
+
+</nav>
+
+    <br>
+    <div class="container bg-estoque bg-light mt-5">
+        <h2 class="text-center title">Controle de Estoque</h2>
+
+        <hr>
+        <div class="mb-4">
+        <h4 class="text-center titli">Estoque Atual</h4>
+
+            <hr>
+            <br>
+            <table class="table table-striped text-light">
+                <thead class="table-dark">
+                    <tr class="font-bold" style="font-size:20px">
+                        <th class="sombra">Código</th>
+                        <th class="sombra">Nome do Produto</th>
+                        <th class="sombra">MAC / FHTT</th>
+                        <th class="sombra">Modelo</th>
+                        <th class="sombra">Fornecedor</th> <!-- Adicionado fornecedor -->
+                        <th class="sombra">Custo</th>
+                        <th class="sombra">Observação</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for produto in estoque %}
+                    <tr class="font">
+                        <td>{{ produto.cod }}</td>
+                        <td>{{ produto.nome }}</td>
+                        <td>{{ produto.mac }}</td>
+                        <td>{{ produto.modelo }}</td>
+                        <td>{{ produto.fornecedor }}</td> <!-- Adicionado fornecedor -->
+                        <td>{{ produto.custo }}</td>
+                        <td>{{ produto.observacao }}</td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <div class="btn-model-container">
+        <button type="button" class="btn btn-danger btn-model custom-btn" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">
+            <i class='bx bx-x'></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-model custom-btn" data-bs-toggle="modal"
+            data-bs-target="#modalAdd">
+            <i class='bx bx-filter-alt'></i>
+        </button>
+        
+        <button type="button" class="btn btn-warning btn-model custom-btn" data-bs-toggle="modal" data-bs-target="#modalTodasSaidas">
+            <i class='bx bx-list-ul'></i>
+        </button>
+
+
+    
+        <button type="button" class="btn btn-model btn-success custom-btn" data-bs-toggle="modal"
+            data-bs-target="#modalFilter">
+            <i class='bx bx-plus-medical'></i>
+        </button>
+
+    </div>
+
+
+<!-- Adicione uma seção para exibir todas as saídas em uma modal -->
+<div class="modal fade" id="modalTodasSaidas" tabindex="-1" aria-labelledby="modalTodasSaidas" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title title" id="modalTodasSaidas">Todas as Saídas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-responsive table-striped text-light">
+                    <thead class="thead-dark" >
+                        <tr class="font-bold" style="font-size:18px">
+                            <th class="sombra">Cod</th>
+                            <th class="sombra">Nome</th>
+                            <th class="sombra">Motivo</th>
+                            <th class="sombra">Técnico</th>
+                            <th class="sombra">Cliente</th>
+                            <th class="sombra">Saida Em</th>
+                            <th class="sombra">Observação</th>
+                            <th class="sombra">Fornecedor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for saida in todas_saidas %}
+     <!-- No trecho que exibe as saídas -->
+                    <tr class="font">
+                        <td>{{ saida.id }}</td>
+                        <td>{{ saida.nome_produto }}</td>
+                        <td>{{ saida.motivo_saida }}</td>
+                        <td>{{ saida.tecnico_response }}</td>
+                        <td>{{ saida.cliente_passado_materiais }}</td>
+                        <td>{{ saida.data_de_saida }}</td>
+                        <td>{{ saida.observacao }}</td>
+                        <td>{{ saida.fornecedor }}</td> <!-- Adicionado fornecedor -->
+                    </tr>
+    
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <!-- Modal Dar Baixa    onclick="return confirm('Tem certeza de que deseja dar baixa neste produto?')"-->
+    <div class="modal fade text-light" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title title" id="exampleModalLabel">Dar Baixa no Estoque</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/baixar_produto" method="post">
+                        <div class="mb-3">
+                            <label class="label" for="cod_produto" style="color:black">Código do Produto:</label>
+                            <input class="form-control" type="number" id="cod_produto" name="cod_produto" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="label" for="motivo_saida" style="color:black">Motivo Da Saida:</label>
+                            <input class="form-control" type="text" id="motivo_saida" name="motivo_saida" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="label" for="tecnico_response" style="color:black">Técnico responsável:</label>
+                            <input class="form-control" type="text" id="tecnico_response" name="tecnico_response"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="label" for="fornecedor" style="color:black">Fornecedor:</label>
+                            <input class="form-control" type="text" id="fornecedor" name="fornecedor" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="label" for="cliente_passado_materiais" style="color:black">Cliente:</label>
+                            <input class="form-control" type="text" id="cliente_passado_materiais"
+                                name="cliente_passado_materiais" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="label" for="observacao" style="color:black">Observação:</label>
+                            <input class="form-control" type="text" id="observacao" name="observacao" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="label" for="data_de_saida" style="color:black">Data de saída:</label>
+                            <input class="form-control" type="date" id="data_de_saida" name="data_de_saida" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-normal" >Dar Baixa</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Filtrar -->
+    <div class="modal fade text-dark" id="modalAdd" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title title" id="modal">Filtrar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <div class="mb-4">
+                            <form action="{{ url_for('filtrar_produtos') }}" method="post">
+                                <label for="filtro">Filtrar por:</label>
+                                <select name="filtro" id="filtro" class="form-control">
+                                    <option value="vac"></option>
+                                    <option value="cod">Código</option>
+                                    <option value="nome">Nome</option>
+                                    <option value="modelo">Modelo</option>
+                                    <option value="fornecedor">Fornecedor</option>
+                                    <option value="custo">Custo</option>
+                                    <option value="mac">MAC</option>
+                                </select>
+                                <br>
+                                <label for="termo">Termo:</label>
+                                <input type="text" name="termo" id="termo" class="form-control">
+                                <br>
+                                <button type="submit" style="width:100%" class="btn btn-primary">Filtrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Cadastrar Produto -->
+    <div class="modal fade text-dark" id="modalFilter" tabindex="-1" aria-labelledby="Filter" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title title" id="Filter">Cadastrar Produto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <form action="/cadastrar_produto" method="post">
+                            <div class="mb-3">
+                                <label class="label" for="nome">Nome do Produto:</label>
+                                <input class="form-control" type="text" id="nome" name="nome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="label" for="modelo">Modelo do Produto:</label>
+                                <input class="form-control" type="text" id="modelo" name="modelo" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="label" for="custo">Custo do Produto:</label>
+                                <input class="form-control" type="number" id="custo" name="custo" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="label" for="fornecedor" style="color:black">Fornecedor:</label>
+                                <input class="form-control" type="text" id="fornecedor" name="fornecedor" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="label" for="observacao" style="color:black">Observação:</label>
+                                <input class="form-control" type="text" id="observacao" name="observacao" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="label" for="mac">MAC do Produto:</label>
+                                <input class="form-control" type="text" id="mac" name="mac" required>
+                                <button type="submit" class="btn btn-normal"  onclick="return confirm('Tem certeza de que deseja adicionar este produto?')">Cadastrar Produto</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
